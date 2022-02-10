@@ -3,6 +3,10 @@
 #include <string>
 #include <cstdlib>
 #include <filesystem>
+#include <vector>
+#include <thread>
+#include <mutex>
+#include <future>
 #include "InfoDirectory_example.h"
 
 namespace fs = std::filesystem;
@@ -23,14 +27,12 @@ int main()
     file.close();
     std::ofstream{ exampleDirectory / "dir1" / "dir2" / "file2.txt" };
     std::ofstream{ exampleDirectory / "dir1" / "dir2" / "file3.txt" };
+   
     //Info about directory
     std::cout << "-----------------------------------------\n";
     std::cout << "Informacje ogolne\n";
     std::cout << "-----------------------------------------\n";
-    std::cout << "Ilosc plikow: " << count_element_in_directory(exampleDirectory, &fs::is_regular_file) << std::endl;
-    std::cout << "Ilosc katalogow: " << count_element_in_directory(exampleDirectory, &fs::is_directory) << std::endl;
-    std::cout << "Ilosc pustych plikow: " << count_empty_element_in_directory(exampleDirectory, &fs::is_regular_file) << std::endl;
-    std::cout << "Ilosc pustych katalogow: " << count_empty_element_in_directory(exampleDirectory, &fs::is_directory) << std::endl;
+    get_info_directory(exampleDirectory);   
     std::cout << "-----------------------------------------\n";
     //Info about not empty file
     std::cout << "Informacje o niepustych plikach\n";

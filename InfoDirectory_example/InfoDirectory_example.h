@@ -2,8 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include <cstdlib>
 #include <filesystem>
+#include <future>
 namespace fs = std::filesystem;
 
 std::size_t count_element_in_directory(fs::path path, bool(*func)(fs::file_status)) {
@@ -43,4 +45,16 @@ void write_not_empty_file(fs::path path) {
             write_info_file(dir_entry);
         }
 }
-
+int foo(int a) {
+    return a * a;
+}
+void get_info_directory(fs::path path) {
+    auto a = std::async([&] { return count_element_in_directory(path, &fs::is_regular_file);  });
+    auto b = std::async([&] { return count_element_in_directory(path, &fs::is_directory);  });
+    auto c = std::async([&] { return count_empty_element_in_directory(path, &fs::is_regular_file);  });
+    auto d = std::async([&] { return count_empty_element_in_directory(path, &fs::is_directory);  });
+    std::cout << "Ilosc plikow: " << a.get() << std::endl;
+    std::cout << "Ilosc katalogow: " << b.get()<< std::endl;
+    std::cout << "Ilosc pustych plikow: " << c.get()<< std::endl;
+    std::cout << "Ilosc pustych katalogow: " << d.get() << std::endl;  
+}
